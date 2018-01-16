@@ -1,5 +1,7 @@
 const Util = require("./util");
 const MovingObject = require("./moving_object");
+const Ship = require("./ship");
+const Bullet = require("./bullet");
 
 function Asteroid(pos, game) {
   Asteroid.COLOR = "#ff6600";
@@ -15,5 +17,16 @@ function Asteroid(pos, game) {
 
 }
 Util.inherits(Asteroid, MovingObject);
+
+Asteroid.prototype.isCollidedWith = function(otherObject) {
+  if (this.radius + otherObject.radius >= Util.distance(this.pos, otherObject.pos)) {
+    if (otherObject instanceof Ship) {
+      otherObject.relocate();
+    } else if (otherObject instanceof Bullet) {
+      this.game.removeBullet(otherObject);
+      this.game.remove(this);
+    }
+  }
+};
 
 module.exports = Asteroid;

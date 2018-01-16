@@ -18,15 +18,15 @@ MovingObject.prototype.draw = function(ctx) {
 MovingObject.prototype.move = function () {
   this.pos[0] += this.vel[0];
   this.pos[1] += this.vel[1];
+  if (!this.isWrappable && this.game.isOutOfBounds(this.pos)) {
+    this.game.removeBullet(this);
+  }
   this.pos = this.game.wrap(this.pos);
 };
 
 MovingObject.prototype.isCollidedWith = function (otherObject) {
-
-  if (this.radius + otherObject.radius >= Util.distance(this.pos, otherObject.pos)) {
-    return true;
-  }
-  return false;
 };
+
+MovingObject.prototype.isWrappable = true;
 
 module.exports = MovingObject;
